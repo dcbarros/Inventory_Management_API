@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+
+  app:
+    image: 'stock-api'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stock-api
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/stockdb"
+      SPRING_DATASOURCE_USERNAME: "admin"
+      SPRING_DATASOURCE_PASSWORD: "admin"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "create"
+    ports:
+      - "8080:8080"
+    networks:
+      - postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "stock@stock.com"
+      PGADMIN_DEFAULT_PASSWORD: "stock"
+    ports:
+      - "2345:80"
+    depends_on:
+      - db
+    networks:
+      - postgres
+  db:
+    container_name: stock-db
+    image: postgres:16.2-alpine3.19
+    environment:
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "stockdb"
+      PG_DATA: "/data/postgres"
+    ports:
+      - "2402:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:
