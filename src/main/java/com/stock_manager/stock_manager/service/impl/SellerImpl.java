@@ -2,7 +2,7 @@ package com.stock_manager.stock_manager.service.impl;
 
 import java.util.UUID;
 
-// import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.stock_manager.stock_manager.dto.request.SellerCreateDtoRequest;
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class SellerImpl implements SellerService{
 
     private final SellerRepository sellerRepository;
-    // private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void createNewSeller(SellerCreateDtoRequest request) {
@@ -33,8 +33,7 @@ public class SellerImpl implements SellerService{
             throw new IllegalArgumentException("password");
         }
         
-        // Seller seller = new Seller(request.name(), request.email(), this.passwordEncoder.encode(request.password()));
-        Seller seller = new Seller(request.name(), request.email(), request.password());
+        Seller seller = new Seller(request.name(), request.email(), this.passwordEncoder.encode(request.password()));
         sellerRepository.save(seller);
     }
 

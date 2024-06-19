@@ -24,7 +24,7 @@ public class SellerController {
         this.sellerService = sellerService;
     }
 
-    @PostMapping()
+    @PostMapping("")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void newSeller(@RequestBody SellerCreateDtoRequest request) {
         this.sellerService.createNewSeller(request);
