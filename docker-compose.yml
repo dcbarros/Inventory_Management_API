@@ -9,7 +9,10 @@ services:
     container_name: stock-api
     depends_on:
       - db
+      - redis
     environment:
+      SPRING_DATA_REDIS_HOST: "redis"  
+      SPRING_DATA_REDIS_PORT: "6379"   
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/stockdb"
       SPRING_DATASOURCE_USERNAME: "admin"
       SPRING_DATASOURCE_PASSWORD: "admin"
@@ -18,17 +21,8 @@ services:
       - "8080:8080"
     networks:
       - postgres
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "stock@stock.com"
-      PGADMIN_DEFAULT_PASSWORD: "stock"
-    ports:
-      - "2345:80"
-    depends_on:
-      - db
-    networks:
-      - postgres
+      - redis  
+
   db:
     container_name: stock-db
     image: postgres:16.2-alpine3.19
@@ -43,5 +37,19 @@ services:
       - postgres
     restart: unless-stopped
 
+  redis:
+    container_name: stock-token-control
+    image: redis:7.2.4-alpine
+    restart: unless-stopped
+    ports:
+      - "63001:6379"
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - "./infra/cache:/data"
+    networks:
+      - redis
 networks:
   postgres:
+    driver: bridge
+  redis:
+    driver: bridge
