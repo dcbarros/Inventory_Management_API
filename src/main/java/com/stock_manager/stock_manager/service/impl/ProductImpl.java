@@ -26,6 +26,7 @@ public class ProductImpl implements ProductService{
     private final ProductRepository productRepository;
 
     @Override
+    //To-Do: Implementar o corpo de resposta do produto e o controller
     public void createNewProduct(ProductCreateDtoRequest request) {
         if(request.category() == null) throw new IllegalArgumentException("A categoria do produto não pode ser nula.");
         if(request.stock() < 0) throw new IllegalArgumentException("O estoque não pode ser negativo.");
