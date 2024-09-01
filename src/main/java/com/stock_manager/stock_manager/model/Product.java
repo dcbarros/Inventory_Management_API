@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import com.stock_manager.stock_manager.model.enums.ProductCategories;
-import com.stock_manager.stock_manager.utils.BarcodeUtils;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,15 +40,16 @@ public class Product {
     private Boolean isActive;
 
     public Product(String name, String description, Integer stock, Integer minimumStock, ProductCategories category,
-            BigDecimal price) {
+            BigDecimal price, String barcode) {
         this.name = name;
         this.description = description;
         this.stock = stock;
         this.minimumStock = minimumStock;
         this.category = category;
         this.price = price;
+        this.barcode = barcode;
 
-        this.barcode = BarcodeUtils.generateBarcode(category);
+        this.barcode = null;
         this.updateAt = LocalDateTime.now();
         this.createAt = LocalDateTime.now();
         this.deleteAt = LocalDateTime.now();
