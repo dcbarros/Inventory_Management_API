@@ -108,5 +108,5 @@ public class Seller implements UserDetails{
     @Override
     public boolean isEnabled() {
         return this.isActive;
-    }    
+    } 
 }
