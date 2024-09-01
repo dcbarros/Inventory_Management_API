@@ -9,6 +9,7 @@ import org.webjars.NotFoundException;
 
 import com.stock_manager.stock_manager.dto.request.SellerCreateDtoRequest;
 import com.stock_manager.stock_manager.dto.request.SellerUpdateDtoRequest;
+import com.stock_manager.stock_manager.dto.response.SellerCreatedResponse;
 import com.stock_manager.stock_manager.dto.response.SellerDetailsDtoResponse;
 import com.stock_manager.stock_manager.model.Seller;
 import com.stock_manager.stock_manager.repository.SellerRepository;
@@ -24,7 +25,7 @@ public class SellerImpl implements SellerService{
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void createNewSeller(SellerCreateDtoRequest request) {
+    public SellerCreatedResponse createNewSeller(SellerCreateDtoRequest request) {
         if(request.email() == null || request.email().isBlank()){
             throw new IllegalArgumentException("email");
         }
@@ -37,6 +38,8 @@ public class SellerImpl implements SellerService{
         
         Seller seller = new Seller(request.name(), request.email(), this.passwordEncoder.encode(request.password()));
         sellerRepository.save(seller);
+
+        return new SellerCreatedResponse(seller.getUuid(), seller.getName(), seller.getEmail());
     }
 
     @Override
