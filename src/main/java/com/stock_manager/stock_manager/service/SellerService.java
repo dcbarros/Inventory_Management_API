@@ -10,5 +10,5 @@ public interface SellerService {
     public void createNewSeller(SellerCreateDtoRequest request);
     public void updateSellerByUuid(UUID sellerUuid, SellerUpdateDtoRequest request);
     public SellerDetailsDtoResponse getSellerByUuid(UUID sellerUuid);
-    public void deleteSellerByUuid(UUID sellerUuid);
+    public void deactivateSellerByUuid(UUID sellerUuid);
 }
