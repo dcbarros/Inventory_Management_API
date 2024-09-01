@@ -63,8 +63,15 @@ public class RestControllerAdvice extends ResponseEntityExceptionHandler{
         final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), HttpStatus.FORBIDDEN, ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
+
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
+        final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), ex.getStatus(), ex.getMessage());
+        return new ResponseEntity<>(errorResponse, ex.getStatus());
+    }
+
+    @ExceptionHandler(value = ExcededAttmptsException.class)
+    public ResponseEntity<ErrorResponse> handleExcededAttmptsException(ExcededAttmptsException ex) {
         final ErrorResponse errorResponse = new ErrorResponse(ex.getClass(), ex.getStatus(), ex.getMessage());
         return new ResponseEntity<>(errorResponse, ex.getStatus());
     }
