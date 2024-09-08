@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.stock_manager.stock_manager.model.enums.UserRoles;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,7 +33,7 @@ public class Seller implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false, unique = true)
     private UUID uuid;
     @NotBlank(message = "O nome é um requisito")
     @Size(min = 3, message = "O nome deve ter pelo menos 3 caractéres")

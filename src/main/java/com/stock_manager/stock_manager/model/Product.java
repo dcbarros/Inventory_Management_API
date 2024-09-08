@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.stock_manager.stock_manager.model.enums.ProductCategories;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private UUID uuid;
 
     private String barcode;
@@ -41,6 +43,7 @@ public class Product {
 
     public Product(String name, String description, Integer stock, Integer minimumStock, ProductCategories category,
             BigDecimal price, String barcode) {
+        this.uuid = UUID.randomUUID();
         this.name = name;
         this.description = description;
         this.stock = stock;
@@ -49,10 +52,11 @@ public class Product {
         this.price = price;
         this.barcode = barcode;
 
-        this.barcode = null;
         this.updateAt = LocalDateTime.now();
         this.createAt = LocalDateTime.now();
         this.deleteAt = LocalDateTime.now();
+
+        this.isActive = true;
     }
 
     public Product() {
