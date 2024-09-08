@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 
 import com.stock_manager.stock_manager.dto.request.ProductCreateDtoRequest;
 import com.stock_manager.stock_manager.dto.request.ProductUpdateDtoRequest;
@@ -26,7 +27,6 @@ public class ProductImpl implements ProductService{
     private final ProductRepository productRepository;
 
     @Override
-    //To-Do: Implementar o corpo de resposta do produto e o controller
     public void createNewProduct(ProductCreateDtoRequest request) {
         if(request.category() == null) throw new IllegalArgumentException("A categoria do produto não pode ser nula.");
         if(request.stock() < 0) throw new IllegalArgumentException("O estoque não pode ser negativo.");
@@ -51,20 +51,39 @@ public class ProductImpl implements ProductService{
 
     @Override
     public void updateProductByUuid(UUID productUuid, ProductUpdateDtoRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProductByUuid'");
+        
+        // throw new UnsupportedOperationException("Unimplemented method 'updateProductByUuid'");
     }
 
     @Override
     public ProductFindDetailsDtoResponse getProductByUuid(UUID productUuid) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductByUuid'");
+        if(productUuid == null) throw new IllegalArgumentException("Id inválido");
+        Product product = productRepository.findByUuid(productUuid)
+                            .orElseThrow(() -> new NotFoundException("Produto com o UUID " + productUuid + " não encontrado"));
+        return new ProductFindDetailsDtoResponse(
+                    productUuid,
+                    product.getName(),
+                    product.getDescription(),
+                    product.getCategory(),
+                    product.getImageUrl(),
+                    product.getStock(),
+                    product.getMinimumStock(),
+                    product.getPrice()
+                );
     }
 
     @Override
     public ProductSearchDtoResponse getProductByBarcode(String barcode) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProductByBarcode'");
+        if(barcode == null || barcode.isBlank() || barcode.length() != 13) throw new IllegalArgumentException("Código de barras inválido");
+        Product product = productRepository.findByBarcode(barcode)
+                            .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
+        return new ProductSearchDtoResponse(
+            product.getUuid(),
+            product.getName(),
+            product.getDescription(),
+            product.getCategory(),
+            product.getImageUrl(),
+            product.getPrice());
     }
 
     @Override
