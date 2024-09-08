@@ -35,14 +35,14 @@ public class SellerController {
         this.sellerService = sellerService;
     }
 
-    @PostMapping("/sign-in")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SellerCreatedResponse newSeller(@RequestBody @Valid SellerCreateDtoRequest request) {
         return this.sellerService.createNewSeller(request);
     }
 
     @GetMapping("/{uuid}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public SellerDetailsDtoResponse getSellerByUuid(@PathVariable UUID uuid) {
         return sellerService.getSellerByUuid(uuid);
     }
@@ -54,6 +54,7 @@ public class SellerController {
     }    
 
     @DeleteMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSellerByUuid(@PathVariable UUID uuid) {
         sellerService.deactivateSellerByUuid(uuid);
     }    
